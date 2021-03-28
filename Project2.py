@@ -5,7 +5,7 @@ import os
 import csv
 import unittest
 
-
+# done
 def get_titles_from_search_results(filename):
     """
     Write a function that creates a BeautifulSoup object on "search_results.htm". Parse
@@ -25,7 +25,6 @@ def get_titles_from_search_results(filename):
 
     # Extract info from the page
     # Get all tags of a certain type from the soup
-    #tags = soup.find_all('span', itemprop="name")
     bookTitles = soup.find_all('a', class_='bookTitle')
     bookAuthors = soup.find_all('span', itemprop='author')
 
@@ -47,6 +46,7 @@ def get_titles_from_search_results(filename):
     return collect_info
 
 
+# done
 def get_search_links():
     """
     Write a function that creates a BeautifulSoup object after retrieving content from
@@ -61,7 +61,23 @@ def get_search_links():
 
     """
 
-    pass
+    # Get a soup from a URL
+    url = 'https://www.goodreads.com/search?q=fantasy&qid=NwUsLiA2Nc'
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html.parser')
+
+    # Extract info from the page
+    # Get all tags of a certain type from the soup
+    urls = soup.find_all('a', itemprop="url")
+    
+    # Collect info from the tags
+    collect_info = []
+
+    for url in urls:
+        if "/book/show" in url['href'] and len(collect_info) < 10:
+            collect_info.append('https://www.goodreads.com' + url['href'])
+    
+    return collect_info
 
 
 def get_book_summary(book_url):
@@ -130,7 +146,7 @@ def extra_credit(filepath):
 class TestCases(unittest.TestCase):
 
     # call get_search_links() and save it to a static variable: search_urls
-    search_urls = get_search_links()
+    #search_urls = get_search_links()
 
     def test_get_titles_from_search_results(self):
         # call get_titles_from_search_results() on search_results.htm and save to a local variable
@@ -211,9 +227,11 @@ if __name__ == '__main__':
     #print(extra_credit("extra_credit.htm"))
     #unittest.main(verbosity=2)
 
-    filename = 'search_results.htm'
-    titles = get_titles_from_search_results(filename)
-    print(titles)
+    # filename = 'search_results.htm'
+    # titles = get_titles_from_search_results(filename)
+    # print(titles)
+
+    print(get_search_links())
 
 
 
