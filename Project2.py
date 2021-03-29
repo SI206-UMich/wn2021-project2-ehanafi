@@ -80,6 +80,7 @@ def get_search_links():
     return collect_info
 
 
+# done
 def get_book_summary(book_url):
     """
     Write a function that creates a BeautifulSoup object that extracts book
@@ -94,9 +95,25 @@ def get_book_summary(book_url):
     Make sure to strip() any newlines from the book title and number of pages.
     """
 
-    pass
+    # Get a soup from a URL
+    url = book_url
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html.parser')
+
+    # Extract info from the page
+    # Get all tags of a certain type from the soup
+    bookTitle = soup.find_all('h1', id="bookTitle")
+    bookAuthor = soup.find_all('span', itemprop="name")
+    bookPages = soup.find_all('span', itemprop="numberOfPages")
+
+    return (
+        bookTitle[0].text.strip(), 
+        bookAuthor[0].text.strip(), 
+        bookPages[0].text.strip()
+    )
 
 
+# done
 def summarize_best_books(filepath):
     """
     Write a function to get a list of categories, book title and URLs from the "BEST BOOKS OF 2020"
@@ -108,7 +125,32 @@ def summarize_best_books(filepath):
     ("Fiction", "The Testaments (The Handmaid's Tale, #2)", "https://www.goodreads.com/choiceawards/best-fiction-books-2020") 
     to your list of tuples.
     """
-    pass
+
+    # Open the file and get the file object
+    source_dir = os.path.dirname(__file__) #<-- directory name
+    full_path = os.path.join(source_dir, filename)
+    infile = open(full_path,'r', encoding='utf-8')
+
+    # Get a soup from a URL
+    soup = BeautifulSoup(infile.read(), 'html.parser')
+
+    # Extract info from the page
+    # Get all tags of a certain type from the soup
+    bookCategory = soup.find_all('h4', class_="category__copy")
+    bookTitle = soup.find_all('img', class_='category__winnerImage')
+    bookURL = soup.find_all('div', class_="category clearFix")
+
+    # Collect info from the tags
+    collect_info = []
+
+    for i in range(len(bookCategory)):
+        category = bookCategory[i].text.strip()
+        title = bookTitle[i]['alt']
+        url = bookURL[i].find('a')['href']
+
+        collect_info.append((category, title, url))
+
+    return collect_info
 
 
 def write_csv(data, filename):
@@ -231,7 +273,16 @@ if __name__ == '__main__':
     # titles = get_titles_from_search_results(filename)
     # print(titles)
 
-    print(get_search_links())
+    # print(get_search_links())
+
+    # book_url = 'https://www.goodreads.com/book/show/4214.Life_of_Pi'
+    # print(get_book_summary(book_url))
+
+    filename = 'best_books_2020.htm'
+    summarize = summarize_best_books(filename)
+    print(summarize)
+
+
 
 
 
