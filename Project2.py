@@ -153,6 +153,7 @@ def summarize_best_books(filepath):
     return collect_info
 
 
+# done
 def write_csv(data, filename):
     """
     Write a function that takes in a list of tuples (called data, i.e. the
@@ -173,17 +174,24 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    with open(filename, mode='w') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',')
+
+        row1 = ["Book Title","Author Name"]
+        csv_writer.writerow(row1)
+
+        for row in data:
+            csv_writer.writerow(row)
 
 
-def extra_credit(filepath):
-    """
-    EXTRA CREDIT
+# def extra_credit(filepath):
+#     """
+#     EXTRA CREDIT
 
-    Please see the instructions document for more information on how to complete this function.
-    You do not have to write test cases for this function.
-    """
-    pass
+#     Please see the instructions document for more information on how to complete this function.
+#     You do not have to write test cases for this function.
+#     """
+#     pass
 
 class TestCases(unittest.TestCase):
 
@@ -269,8 +277,8 @@ if __name__ == '__main__':
     #print(extra_credit("extra_credit.htm"))
     #unittest.main(verbosity=2)
 
-    # filename = 'search_results.htm'
-    # titles = get_titles_from_search_results(filename)
+    filename = 'search_results.htm'
+    titles = get_titles_from_search_results(filename)
     # print(titles)
 
     # print(get_search_links())
@@ -278,10 +286,12 @@ if __name__ == '__main__':
     # book_url = 'https://www.goodreads.com/book/show/4214.Life_of_Pi'
     # print(get_book_summary(book_url))
 
-    filename = 'best_books_2020.htm'
-    summarize = summarize_best_books(filename)
-    print(summarize)
-
+    # filename = 'best_books_2020.htm'
+    # summarize = summarize_best_books(filename)
+    # print(summarize)
+    
+    csv = write_csv(titles, 'output.csv')
+    print(csv)
 
 
 
